@@ -7,7 +7,7 @@ using namespace std;
 // 🎨 ASCII Art for Welcome
 void showWelcomeArt() {
     cout << R"(
-============ Welcome to MegaChatBot 💬 ============            
+============ Welcome to AJ ChatBot 💬 ============            
 )";
     cout << "\n";
 }
