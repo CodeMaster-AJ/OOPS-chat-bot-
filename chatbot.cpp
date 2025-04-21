@@ -61,20 +61,20 @@ public:
 
         if (input == "hi" || input == "hello" || input == "hey") {
             cout << botName << ": Hi there! 😊 How can I help you?\n";
-        } else if (input.find("name") != string::npos) {
+        }  if (input.find("name") != string::npos) {
             cout << botName << ": I'm " << botName << ", your friendly C++ chatbot.\n";
-        } else if (input.find("time") != string::npos) {
+        }  if (input.find("time") != string::npos) {
             cout << botName << ": Current time is ⏰ " << getTime() << "\n";
-        } else if (input.find("date") != string::npos) {
+        }  if (input.find("date") != string::npos) {
             cout << botName << ": Today's date is 📅 " << getDate() << "\n";
-        } else if (input.find("how are you") != string::npos) {
+        }  if (input.find("how are you") != string::npos) {
             cout << botName << ": I'm fantastic! Just living the binary dream 😄\n";
-        } else if (input == "help") {
+        }  if (input == "help") {
             showHelp();
-        } else if (input == "clear") {
+        }  if (input == "clear") {
             system("clear"); // use "cls" on Windows
             greetUser();
-        } else if (input == "bye") {
+        }  if (input == "bye") {
             cout << botName << ": Are you sure you want to exit? (yes/no): ";
             string confirm;
             getline(cin, confirm);
