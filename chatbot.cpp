@@ -4,7 +4,7 @@
 #include <algorithm>
 using namespace std;
 
-// 🎨 ASCII Art for Welcome
+// 🎨 ASCII Welcome Art
 void showWelcomeArt() {
     cout << R"(
 ============ Welcome to AJ ChatBot 💬 ============            
@@ -12,18 +12,16 @@ void showWelcomeArt() {
     cout << "\n";
 }
 
-// 🌟 ChatBot Class
-class AJchatbot {
-private:
+// 🔵 Base Class for Reusability – [INHERITANCE + ABSTRACTION]
+class BotBase {
+protected:
     string botName;
 
-    // 🧠 Convert user input to lowercase
     string toLower(string str) {
         transform(str.begin(), str.end(), str.begin(), ::tolower);
         return str;
     }
 
-    // ⏰ Get current time
     string getTime() {
         time_t now = time(0);
         tm *ltm = localtime(&now);
@@ -32,7 +30,6 @@ private:
         return string(buffer);
     }
 
-    // 📅 Get current date
     string getDate() {
         time_t now = time(0);
         tm *ltm = localtime(&now);
@@ -42,50 +39,80 @@ private:
     }
 
 public:
+    virtual void greetUser() = 0; // Pure Virtual [ABSTRACTION + POLYMORPHISM]
+    virtual void getResponse(string input) = 0;
+    virtual ~BotBase() {} // Virtual Destructor
+};
+
+// 🟢 Derived Class – [INHERITANCE + ENCAPSULATION]
+class AJchatbot : public BotBase {
+private:
+    static int chatCount; // [STATIC MEMBER]
+
+public:
     // 🛠️ Constructor
     AJchatbot(string name = "MegaBot") {
         botName = name;
         greetUser();
     }
 
-    // 👋 Initial Greet
-    void greetUser() {
-        showWelcomeArt();
-        cout << botName << ": Hello! I'm " << botName << " — your interactive C++ chatbot.\n";
-        cout << botName << ": Type anything or ask for help by typing 'help'.\n\n";
+    // 🧹 Destructor
+    ~AJchatbot() {
+        cout << botName << ": Shutting down... Bye! 👋\n";
     }
 
-    // 💬 Main Response Logic
-    void getResponse(string userInput) {
+    // 👋 Greeting Message – [POLYMORPHISM]
+    void greetUser() override {
+        showWelcomeArt();
+        cout << botName << ": Hello! I'm " << botName << ", your interactive OOP C++ ChatBot.\n";
+        cout << botName << ": Type anything or ask for help using 'help'.\n\n";
+    }
+
+    // 🧠 Function Overloading Example
+    void info() {
+        cout << botName << ": I'm an AI bot using OOP concepts in C++!\n";
+    }
+
+    void info(string topic) {
+        cout << botName << ": You asked about '" << topic << "'. Here's what I can tell...\n";
+    }
+
+    // 💬 Handle Responses
+    void getResponse(string userInput) override {
+        chatCount++; // increment chat count
         string input = toLower(userInput);
 
         if (input == "hi" || input == "hello" || input == "hey") {
             cout << botName << ": Hi there! 😊 How can I help you?\n";
-        }  if (input.find("name") != string::npos) {
-            cout << botName << ": I'm " << botName << ", your friendly C++ chatbot.\n";
-        }  if (input.find("time") != string::npos) {
+        } else if (input.find("name") != string::npos) {
+            cout << botName << ": I'm " << botName << ", your friendly chatbot.\n";
+        } else if (input.find("time") != string::npos) {
             cout << botName << ": Current time is ⏰ " << getTime() << "\n";
-        }  if (input.find("date") != string::npos) {
+        } else if (input.find("date") != string::npos) {
             cout << botName << ": Today's date is 📅 " << getDate() << "\n";
-        }  if (input.find("how are you") != string::npos) {
-            cout << botName << ": I'm fantastic! Just living the binary dream 😄\n";
-        }  if (input == "help") {
+        } else if (input.find("how are you") != string::npos) {
+            cout << botName << ": I'm doing great! Living the binary dream 😄\n";
+        } else if (input == "help") {
             showHelp();
-        }  if (input == "clear") {
+        } else if (input == "info") {
+            info(); // overloaded function
+        } else if (input.find("info about") != string::npos) {
+            info(input); // overloaded function
+        } else if (input == "clear") {
             system("clear"); // use "cls" on Windows
             greetUser();
-        }  if (input == "bye") {
+        } else if (input == "bye") {
             cout << botName << ": Are you sure you want to exit? (yes/no): ";
             string confirm;
             getline(cin, confirm);
             if (toLower(confirm) == "yes") {
-                cout << botName << ": Alright, goodbye! 👋\n";
+                cout << botName << ": Goodbye! You had " << chatCount << " interactions. 👋\n";
                 exit(0);
             } else {
-                cout << botName << ": Great! Let's continue chatting 😄\n";
+                cout << botName << ": Awesome! Let's keep chatting 😄\n";
             }
         } else {
-            cout << botName << ": Hmm... I didn't get that. Type 'help' to see what I can do!\n";
+            cout << botName << ": Sorry, I didn't understand that. Type 'help' to know more.\n";
         }
     }
 
@@ -100,12 +127,16 @@ public:
         cout << " • date                   → Today's date\n";
         cout << " • clear                  → Clear the screen\n";
         cout << " • bye                    → Exit the bot\n";
+        cout << " • info / info about X    → Bot info\n";
         cout << " • help                   → Show this menu\n";
         cout << "----------------------------------\n\n";
     }
 };
 
-// 🧪 Main Program
+// 🧮 Initialize static member
+int AJchatbot::chatCount = 0;
+
+// 🔁 Main Program
 int main() {
     AJchatbot bot("AJ");
     string userInput;
